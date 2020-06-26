@@ -4,12 +4,12 @@ import UIKit
  
  تحتوي لعبة الأونو على ٤ ألوان و١٠ أرقام.
  - تتكرر الأرقام لكل لون مرتين. ماعدا الرقم صفر، يتواجد مرة واحدة للون الواحد.
-- توجد هناك ورقتين Action Cards لكل لون.
+ - توجد هناك ورقتين Action Cards لكل لون.
  1. Draw
  2. Reverse
  3. Pass
-
-*/
+ 
+ */
 
 
 //: ![Uno Deck](deck.jpg)
@@ -17,7 +17,7 @@ import UIKit
 
 /*:
  ### المطلوب:
-#### الجزء الأول:
+ #### الجزء الأول:
  -- قم بإنشاء struct باسم Card به  الصفات التالية
  * color: String
  * number: Int
@@ -30,7 +30,7 @@ import UIKit
  - Yellow: 0 -> 9
  
  #### الجزء الثاني:
--- قم بإنشاء دالة بداخل الستركت Card باسم  `imageName`والتي تقوم بإرجاع اسم الصورة للكرت. قم بفتح المجلد Resources الموجود بداخل الplayground من النافذة اليسرى لرؤية طريقة تسمية الكرت
+ -- قم بإنشاء دالة بداخل الستركت Card باسم  `imageName`والتي تقوم بإرجاع اسم الصورة للكرت. قم بفتح المجلد Resources الموجود بداخل الplayground من النافذة اليسرى لرؤية طريقة تسمية الكرت
  ###### مثال على تسمية الكروت موضحة كالتالي، قم بتشغيل الكود لرؤية الصور أسفل هذه الأكواد:
  */
 
@@ -52,30 +52,30 @@ var wild_Draw = UIImage(named: "Wild_Draw.png")
  ```
  let randomCard = cards.randomElement()!
  let randomCardImage = UIImage(named: randomCard.imageName())
-```
-
+ ```
+ 
  ```
  let cardImages = cards.map{UIImage(named: $0.imageName())}
  randomCardImage
  ```
  إن تم ذلك بالشكل الصحيح من دون أي خطأ، فقد نجحت في المهمة! 🎉
  
-  #### الجزء الرابع (بونص 🎁):
+ #### الجزء الرابع (بونص 🎁):
  -- قم بتعبئة مجموعة الكروت كل رقم يعرض مرتين، إلا الصفر، يعرض مرة واحدة، كما هو موضح في صورة مجموعة الأونو في بداية الملف
  -- قم باستعمال For Loop لتعبئة جميع الكروت
-
+ 
  
  #### الجزء الخامس (إكسترا إكسترا بونص 🌶🔥)
  -- قم بتعبئة المصفوفة أيضاً ب Action Cards من خلال تحويلك للصفات إلى optional بإضافة علامة الاستفهام إليها
-اسم ال Action Cards موضح في الصور بداخل ال Resources
+ اسم ال Action Cards موضح في الصور بداخل ال Resources
  
  ```
  var color: String?
  var action: String?
  var number: Int?
  ```
-  لا تنسى إزالة كلمة  Optional بسبب تحويلك للمتغيرات إلى متغيرات بعلامة الاستفهام. ربما ستضطر إلى كتابة بعض أوامر if
-  
+ لا تنسى إزالة كلمة  Optional بسبب تحويلك للمتغيرات إلى متغيرات بعلامة الاستفهام. ربما ستضطر إلى كتابة بعض أوامر if
+ 
  */
 
 
@@ -88,18 +88,67 @@ var wild_Draw = UIImage(named: "Wild_Draw.png")
 /// قم بإنشاء الستركت هنا
 
 // struct ...
+struct Card{
+    var color: String?
+    var number: Int?
+    var actionCards: String?
+    
+    func imageName() -> String{
+        // نتأكد ان الكرت من مروت الارقام
+        //معنى الشرط ... ان الرقم لا يساوي فراااااغ
+        if number != nil{
+            print("\(color!)_\(number!)")
+            return "\(color!)_\(number!)"
+        }else if actionCards! == "Wild" || actionCards! == "Wild_Draw" {
+             print("\(actionCards!)")
+            return "\(actionCards!)"
+        }else {
+             print("\(color!)_\(actionCards!)")
+            return "\(color!)_\(actionCards!)"
+        }
+    }
+}
 
+var cards: [Card] = []
+let colors = ["Blue", "Yellow", "Red", "Green"]
+let actionCards = ["Draw", "Skip", "Reverse", "Wild_Draw","Wild"]
 
+for color in colors{
+
+// اضافة كرت رقم ٠ من كل الالوان
+        cards.append(Card(color: color, number: 0))
+        
+        //تكرار الارقام مرتين
+        for turn in 1...2{
+        // اضافة كرت الاكشن
+            for action in actionCards{
+              
+                if turn  == 1 && action != "Wild_Draw" {
+                      cards.append(Card(color: color, actionCards: action))
+                }else if turn  == 2 && action != "Wild" {
+                      cards.append(Card(color: color, actionCards: action))
+                }
+              
+
+            }
+            //اضافة كروت الارقام
+            for i in 1...9{
+                cards.append(Card(color: color, number: i))
+            }
+        }
+    
+    
+}
 
 
 
 // لا تقم بإزالة الملاحظات إلا عند وصولك للمطلوب الثالث
 
-//
-//let randomCard = cards.randomElement()!
-//let randomCardImage = UIImage(named: randomCard.imageName())
-//
-//
-//let cardImages = cards.map{UIImage(named: $0.imageName())}
-//randomCardImage
-//cardImages
+
+let randomCard = cards.randomElement()!
+let randomCardImage = UIImage(named: randomCard.imageName())
+
+
+let cardImages = cards.map{UIImage(named: $0.imageName())}
+randomCardImage
+cardImages
